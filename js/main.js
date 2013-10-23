@@ -59,6 +59,7 @@ var directionsDisplay;
             };
             directionsService.route(request, function(response, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
+                    $("#instructions").hide();
                     addBuyNowLink();
                     directionsDisplay.setDirections(response);
                 }

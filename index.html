@@ -18,6 +18,7 @@
             margin: 0px;
             padding: 0px;
             overflow: hidden;
+            font-family: Roboto,Arial,sans-serif;
         }
 
         #directions-panel {
@@ -28,10 +29,15 @@
             overflow: auto;
         }
 
+        #instructions {
+            text-align: center;
+            font-size: 1.8em;
+            margin-top: 50%;
+        }
+
         #buy-ticket-panel {
             display: none;
             font-size: 1.8em;
-            font-family: Roboto,Arial,sans-serif;
         }
         #buy-ticket {
             color: #7982EE;
@@ -79,6 +85,9 @@
 </div>
 
 <div id="directions-panel">
+    <div id="instructions">
+        Enter Start and End destinations to get a rail connection and buy tickets.
+    </div>
     <div id="buy-ticket-panel">
         <a id="buy-ticket" href="http://www.bahn.de" target="_blank">Buy ticket for this trip</a>
     </div>
