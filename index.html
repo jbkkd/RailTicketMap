@@ -18,21 +18,17 @@
             margin: 0px;
             padding: 0px
         }
-        #panel {
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            margin-left: -180px;
-            z-index: 5;
-            background-color: #fff;
-            padding: 5px;
-            border: 1px solid #999;
-        }
+
         #directions-panel {
+            margin-top: 10px;
             height: 100%;
             float: right;
             width: 390px;
             overflow: auto;
+        }
+
+        #buy-ticket-panel {
+            display: none;
         }
 
         #map-canvas {
@@ -61,13 +57,10 @@
             }
         }
     </style>
-
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false"></script>
-
     <script>
         var directionsDisplay;
-        var autoCompleteStart;
-        var autoCompleteEnd;
+        var autoCompleteStart, autoCompleteEnd;
         var directionsService = new google.maps.DirectionsService();
 
         function initialize() {
@@ -115,22 +108,51 @@
                 destination: end,
                 travelMode: google.maps.TravelMode.TRANSIT,
                 transitOptions: {
-                    departureTime: new Date(1382169600)
+                    departureTime: new Date()
                 }
             };
             directionsService.route(request, function(response, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
-                    addBuyNowLinks(response);
+                    addBuyNowLink();
                     directionsDisplay.setDirections(response);
                 }
             });
         }
 
-        function addBuyNowLinks(response) {
+        function addBuyNowLink() {
+            var bahnlink = "http://reiseauskunft.bahn.de/bin/query.exe/en?existOptimizePrice=1&&S=STARTDESTINATION&REQ0JourneyStopsSID=&REQ0JourneyStopsS0A=7&ignoreTypeCheck=no&Z=ENDDESTINATION&REQ0JourneyStopsZ0A=7&trip-type=single&date=Tu%2C+DATEOFDEPARTURE&time=HOURDEPARTURE%3AMINUTEDEPARTURE&timesel=depart&returnTimesel=depart&optimize=0&travelProfile=-1&adult-number=1&children-number=0&infant-number=0&tariffTravellerType.1=E&tariffTravellerReductionClass.1=0&tariffTravellerAge.1=&qf-trav-bday-1=&tariffTravellerReductionClass.2=0&tariffTravellerReductionClass.3=0&tariffTravellerReductionClass.4=0&tariffTravellerReductionClass.5=0&tariffClass=2&start=1";
+            var startPlace = autoCompleteStart.getPlace();
+            var startCity;
+            var endPlace = autoCompleteEnd.getPlace();
+            var endCity;
+            for (var i = 0; i < startPlace.address_components.length; i++) {
+                var addressType = startPlace.address_components[i].types[0];
+                if (addressType == "locality") {
+                    startCity = startPlace.address_components[i].long_name;
+                    break;
+                }
+            }
+            for (var i = 0; i < endPlace.address_components.length; i++) {
+                var addressType = endPlace.address_components[i].types[0];
+                if (addressType == "locality") {
+                    endCity = endPlace.address_components[i].long_name;
+                    break;
+                }
+            }
+            bahnlink = bahnlink.replace("STARTDESTINATION", startCity);
+            bahnlink = bahnlink.replace("ENDDESTINATION", endCity);
+            var date = new Date();
+            bahnlink = bahnlink.replace("DATEOFDEPARTURE", date.toLocaleDateString("de-DE"));
+            bahnlink = bahnlink.replace("HOURDEPARTURE", date.getHours().toString());
+            bahnlink = bahnlink.replace("MINUTEDEPARTURE", date.getMinutes().toString());
+            $("#buy-ticket-panel").show();
+            $("#buy-ticket").attr("href", bahnlink);
+        }
+
+        function addBuyNowLinksToDirections(response) {
             var steps = response.routes[0].legs[0].steps;
-            for (i = 0; i < steps.length; ++i) {
-                debugger;
-                agency = steps[i].transit.line.agencies[0];
+            for (var i = 0; i < steps.length; ++i) {
+                var agency = steps[i].transit.line.agencies[0];
                 if (agency.name.indexOf("Deutsche Bahn") != -1)
                 {
                     agency.name += " - Buy Ticket"
@@ -146,51 +168,22 @@
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<!-- Add your site or application content here -->
-<p>Hello world! This is HTML5 Boilerplate.</p>
 <div id="control">
     <strong>Start:</strong>
     <input id="start" onkeydown="if (event.keyCode == 13) calcRoute();">
-    <select style="display: none" id="start1" onchange="calcRoute();">
-        <option value="Berlin">Berlin</option>
-        <option value="Dresden">Dresden</option>
-        <option value="joplin, mo">Joplin, MO</option>
-        <option value="oklahoma city, ok">Oklahoma City</option>
-        <option value="amarillo, tx">Amarillo</option>
-        <option value="gallup, nm">Gallup, NM</option>
-        <option value="flagstaff, az">Flagstaff, AZ</option>
-        <option value="winona, az">Winona</option>
-        <option value="kingman, az">Kingman</option>
-        <option value="barstow, ca">Barstow</option>
-        <option value="san bernardino, ca">San Bernardino</option>
-        <option value="los angeles, ca">Los Angeles</option>
-    </select>
     <strong>End:</strong>
     <input id="end" onkeydown="if (event.keyCode == 13) calcRoute();">
-    <select style="display: none" id="end1" onchange="calcRoute();">
-        <option value="Berlin">Berlin</option>
-        <option value="Dresden">Dresden</option>
-        <option value="joplin, mo">Joplin, MO</option>
-        <option value="oklahoma city, ok">Oklahoma City</option>
-        <option value="amarillo, tx">Amarillo</option>
-        <option value="gallup, nm">Gallup, NM</option>
-        <option value="flagstaff, az">Flagstaff, AZ</option>
-        <option value="winona, az">Winona</option>
-        <option value="kingman, az">Kingman</option>
-        <option value="barstow, ca">Barstow</option>
-        <option value="san bernardino, ca">San Bernardino</option>
-        <option value="los angeles, ca">Los Angeles</option>
-    </select>
 </div>
-<div id="directions-panel"></div>
+
+<div id="directions-panel">
+    <div id="buy-ticket-panel">
+        <a id="buy-ticket" href="http://www.bahn.de" target="_blank">Buy ticket fot this trip</a>
+    </div>
+</div>
 <div id="map-canvas"></div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-<script src="js/plugins.js"></script>
-<script src="js/main.js"></script>
 
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 <script>
     (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
             function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
