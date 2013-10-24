@@ -69,25 +69,47 @@ var directionsDisplay;
         function addBuyNowLink() {
             var bahnlink = "http://reiseauskunft.bahn.de/bin/query.exe/en?existOptimizePrice=1&&S=STARTDESTINATION&REQ0JourneyStopsSID=&REQ0JourneyStopsS0A=7&ignoreTypeCheck=no&Z=ENDDESTINATION&REQ0JourneyStopsZ0A=7&trip-type=single&date=Tu%2C+DATEOFDEPARTURE&time=HOURDEPARTURE%3AMINUTEDEPARTURE&timesel=depart&returnTimesel=depart&optimize=0&travelProfile=-1&adult-number=1&children-number=0&infant-number=0&tariffTravellerType.1=E&tariffTravellerReductionClass.1=0&tariffTravellerAge.1=&qf-trav-bday-1=&tariffTravellerReductionClass.2=0&tariffTravellerReductionClass.3=0&tariffTravellerReductionClass.4=0&tariffTravellerReductionClass.5=0&tariffClass=2&start=1";
             var startPlace = autoCompleteStart.getPlace();
-            var startCity;
+            var startStreetNumber, startStreet, startCity, startFullAddress;
             var endPlace = autoCompleteEnd.getPlace();
-            var endCity;
+            var endStreetNumber, endStreet, endCity, endFullAddress;
             for (var i = 0; i < startPlace.address_components.length; i++) {
                 var addressType = startPlace.address_components[i].types[0];
+                var nameOfAddress = startPlace.address_components[i].long_name;
                 if (addressType == "locality") {
-                    startCity = startPlace.address_components[i].long_name;
-                    break;
+                    startCity = nameOfAddress
+                }
+                else if (addressType == "street_number")
+                {
+                    startStreetNumber = nameOfAddress;
+                }
+                else if (addressType == "route")
+                {
+                    startStreet = nameOfAddress;
                 }
             }
             for (var i = 0; i < endPlace.address_components.length; i++) {
                 var addressType = endPlace.address_components[i].types[0];
+                var nameOfAddress = endPlace.address_components[i].long_name;
                 if (addressType == "locality") {
-                    endCity = endPlace.address_components[i].long_name;
-                    break;
+                    endCity = nameOfAddress;
+                }
+                else if (addressType == "street_number")
+                {
+                    endStreetNumber = nameOfAddress;
+                }
+                else if (addressType == "route")
+                {
+                    endStreet = nameOfAddress;
                 }
             }
-            bahnlink = bahnlink.replace("STARTDESTINATION", startCity);
-            bahnlink = bahnlink.replace("ENDDESTINATION", endCity);
+            startFullAddress = (startStreetNumber ? startStreetNumber + ", " : "");
+            startFullAddress = startFullAddress + (startStreet ? startStreet + ", " : "");
+            startFullAddress = startFullAddress + startCity;
+            endFullAddress = (endStreetNumber ? endStreetNumber + ", " : "");
+            endFullAddress = endFullAddress + (endStreet ? endStreet + ", " : "");
+            endFullAddress = endFullAddress + endCity;
+            bahnlink = bahnlink.replace("STARTDESTINATION", startFullAddress);
+            bahnlink = bahnlink.replace("ENDDESTINATION", endFullAddress);
             var date = new Date();
             bahnlink = bahnlink.replace("DATEOFDEPARTURE", date.toLocaleDateString("de-DE"));
             bahnlink = bahnlink.replace("HOURDEPARTURE", date.getHours().toString());
