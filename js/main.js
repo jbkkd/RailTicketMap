@@ -49,10 +49,7 @@ function initialize() {
 function calcRoute() {
     var start = document.getElementById('start').value;
     var end = document.getElementById('end').value;
-    var hourMinuteArray = $("#time").val().split(":");
-    var date = new Date();
-    date.setHours(hourMinuteArray[0]);
-    date.setMinutes(hourMinuteArray[1]);
+    var date = $("#time").datetimepicker("getDate");
     var request = {
         origin: start,
         destination: end,
@@ -71,11 +68,11 @@ function calcRoute() {
 }
 
 function ReplaceBahnlinkVariables(bahnlink, startFullAddress, endFullAddress) {
-    var date = new Date();
+    var date = new $("#time").datetimepicker("getDate");
     bahnlink = bahnlink.replace("STARTDESTINATION", startFullAddress);
     bahnlink = bahnlink.replace("ENDDESTINATION", endFullAddress);
     bahnlink = bahnlink.replace("DATEOFDEPARTURE", date.toLocaleDateString("de-DE"));
-    bahnlink = bahnlink.replace("TIMEOFDEPARTURE", $("#time").val());
+    bahnlink = bahnlink.replace("TIMEOFDEPARTURE", date.getHours() + ":" + date.getMinutes());
     return bahnlink;
 }
 function addBuyNowLink() {
@@ -139,6 +136,7 @@ function addBuyNowLinksToDirections(response) {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 $(document).ready(function() {
-    var nowDate = new Date();
-    $("#time").val(nowDate.getHours() + ":" + nowDate.getMinutes());
+    $('#time').datetimepicker({
+        minDate: new Date()
+    });
 })

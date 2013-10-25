@@ -3,19 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
+    <title>RailTicketMap</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
-
-    <style>
-
-    </style>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script src="js/jquery-ui-timepicker-addon.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false"></script>
     <script src="js/main.js"></script>
 </head>
@@ -26,7 +23,7 @@
 
 <div id="control">
     <strong>Time of Departure:</strong>
-    <input id="time" onkeydown="if (event.keyCode == 13) calcRoute();" style="width: 45px;" onchange="if (!this.value.match(/^([01]\d|2[0-3]):?([0-5]\d)$/)) this.value = '';">
+    <input id="time" type="text" style="width:120px;" onkeydown="if (event.keyCode == 13) calcRoute();">
     <strong>Start:</strong>
     <input id="start" onkeydown="if (event.keyCode == 13) return;">
     <strong>End:</strong>
@@ -37,7 +34,7 @@
     <div id="instructions">
         Enter Start and End destinations to get a rail connection and buy tickets.
         <div id="help">
-            Version 0.3<br>
+            Version 0.4<br>
             Questions? Comments? Answers? Anything else? find me on omerkorner at gmail,
             or go to <a href="https://github.com/jbkkd/RailTicketMap" target="_blank">https://github.com/jbkkd/RailTicketMap</a>
         </div>
