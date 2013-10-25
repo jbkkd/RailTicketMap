@@ -15,6 +15,7 @@
     <style>
 
     </style>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false"></script>
     <script src="js/main.js"></script>
 </head>
@@ -24,6 +25,8 @@
 <![endif]-->
 
 <div id="control">
+    <strong>Time of Departure:</strong>
+    <input id="time" onkeydown="if (event.keyCode == 13) calcRoute();" style="width: 45px;" onchange="if (!this.value.match(/^([01]\d|2[0-3]):?([0-5]\d)$/)) this.value = '';">
     <strong>Start:</strong>
     <input id="start" onkeydown="if (event.keyCode == 13) return;">
     <strong>End:</strong>
@@ -36,7 +39,7 @@
         <div id="help">
             Version 0.2<br>
             Questions? Comments? Answers? Anything else? find me on omerkorner at gmail,
-            or go to <a href="https://github.com/jbkkd/RailTicketMap">https://github.com/jbkkd/RailTicketMap</a>
+            or go to <a href="https://github.com/jbkkd/RailTicketMap" target="_blank">https://github.com/jbkkd/RailTicketMap</a>
         </div>
     </div>
     <div id="buy-ticket-panel">
@@ -44,8 +47,6 @@
     </div>
 </div>
 <div id="map-canvas"></div>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
 <script>
     (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
