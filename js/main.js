@@ -145,6 +145,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 $(document).ready(function() {
     $('#time').datetimepicker({
-        minDate: new Date()
+        minDate: new Date(),
+        onSelect: function () {calcRoute();}
     });
 })
