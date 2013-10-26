@@ -22,7 +22,11 @@
 <![endif]-->
 
 <div id="control">
-    <strong>Time of Departure:</strong>
+    <strong>Time of </strong>
+        <select id="departureArrival">
+            <option value="depart">Departure:</option>
+            <option value="arrive">Arrival:</option>
+        </select>
     <input id="time" type="text" style="width:120px;" onkeydown="if (event.keyCode == 13) calcRoute();">
     <strong>Start:</strong>
     <input id="start" onkeydown="if (event.keyCode == 13) return;">
@@ -34,7 +38,7 @@
     <div id="instructions">
         Enter Start and End destinations to get a rail connection and buy tickets.
         <div id="help">
-            Version 0.4<br>
+            Version 0.5<br>
             Questions? Comments? Answers? Anything else? find me on omerkorner at gmail,
             or go to <a href="https://github.com/jbkkd/RailTicketMap" target="_blank">https://github.com/jbkkd/RailTicketMap</a>
         </div>
