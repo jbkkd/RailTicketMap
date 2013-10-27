@@ -72,8 +72,15 @@ function calcRoute() {
     });
 }
 
-function ReplaceBahnlinkVariables(bahnlink, startFullAddress, endFullAddress) {
-    var date = new $("#time").datetimepicker("getDate");
+function ReplaceBahnlinkVariables(bahnlink, startCountry, startFullAddress, endFullAddress) {
+    var date = $("#time").datetimepicker("getDate");
+    date = date ? date : new Date;
+    if (startCountry == "Germany") {
+        bahnlink = bahnlink.replace("COUNTRYSPECIFICSITE", "reiseauskunft.bahn.de");
+    }
+    else {
+        bahnlink = bahnlink.replace("COUNTRYSPECIFICSITE", "fahrplan.sbb.ch");
+    }
     bahnlink = bahnlink.replace("STARTDESTINATION", startFullAddress);
     bahnlink = bahnlink.replace("ENDDESTINATION", endFullAddress);
     bahnlink = bahnlink.replace("DATEOFJOURNEY", date.toLocaleDateString("de-DE"));
@@ -83,9 +90,9 @@ function ReplaceBahnlinkVariables(bahnlink, startFullAddress, endFullAddress) {
 }
 
 function addBuyNowLink() {
-    var bahnlink = "http://reiseauskunft.bahn.de/bin/query.exe/en?existOptimizePrice=1&&S=STARTDESTINATION&REQ0JourneyStopsSID=&REQ0JourneyStopsS0A=7&ignoreTypeCheck=no&Z=ENDDESTINATION&REQ0JourneyStopsZ0A=7&trip-type=single&date=Tu%2C+DATEOFJOURNEY&time=TIMEOFJOURNEY&timesel=DEPARTORARRIVE&returnTimesel=depart&optimize=0&travelProfile=-1&adult-number=1&children-number=0&infant-number=0&tariffTravellerType.1=E&tariffTravellerReductionClass.1=0&tariffTravellerAge.1=&qf-trav-bday-1=&tariffTravellerReductionClass.2=0&tariffTravellerReductionClass.3=0&tariffTravellerReductionClass.4=0&tariffTravellerReductionClass.5=0&tariffClass=2&start=1";
+    var bahnlink = "http://COUNTRYSPECIFICSITE/bin/query.exe/en?existOptimizePrice=1&&S=STARTDESTINATION&REQ0JourneyStopsSID=&REQ0JourneyStopsS0A=7&ignoreTypeCheck=no&Z=ENDDESTINATION&REQ0JourneyStopsZ0A=7&trip-type=single&date=Tu%2C+DATEOFJOURNEY&time=TIMEOFJOURNEY&timesel=DEPARTORARRIVE&returnTimesel=depart&optimize=0&travelProfile=-1&adult-number=1&children-number=0&infant-number=0&tariffTravellerType.1=E&tariffTravellerReductionClass.1=0&tariffTravellerAge.1=&qf-trav-bday-1=&tariffTravellerReductionClass.2=0&tariffTravellerReductionClass.3=0&tariffTravellerReductionClass.4=0&tariffTravellerReductionClass.5=0&tariffClass=2&start=1";
     var startPlace = autoCompleteStart.getPlace();
-    var startStreetNumber, startStreet, startCity, startFullAddress;
+    var startStreetNumber, startStreet, startCity, startFullAddress, startCountry;
     var endPlace = autoCompleteEnd.getPlace();
     var endStreetNumber, endStreet, endCity, endFullAddress;
     var i, addressType, nameOfAddress;
@@ -93,15 +100,16 @@ function addBuyNowLink() {
         addressType = startPlace.address_components[i].types[0];
         nameOfAddress = startPlace.address_components[i].long_name;
         if (addressType == "locality") {
-            startCity = nameOfAddress
+            startCity = nameOfAddress;
         }
-        else if (addressType == "street_number")
-        {
+        else if (addressType == "street_number") {
             startStreetNumber = nameOfAddress;
         }
-        else if (addressType == "route")
-        {
+        else if (addressType == "route") {
             startStreet = nameOfAddress;
+        }
+        else if (addressType == "country") {
+            startCountry = nameOfAddress;
         }
     }
     for (i = 0; i < endPlace.address_components.length; i++) {
@@ -110,12 +118,10 @@ function addBuyNowLink() {
         if (addressType == "locality") {
             endCity = nameOfAddress;
         }
-        else if (addressType == "street_number")
-        {
+        else if (addressType == "street_number") {
             endStreetNumber = nameOfAddress;
         }
-        else if (addressType == "route")
-        {
+        else if (addressType == "route") {
             endStreet = nameOfAddress;
         }
     }
@@ -125,7 +131,7 @@ function addBuyNowLink() {
     endFullAddress = (endStreetNumber ? endStreetNumber + ", " : "");
     endFullAddress = endFullAddress + (endStreet ? endStreet + ", " : "");
     endFullAddress = endFullAddress + endCity;
-    bahnlink = ReplaceBahnlinkVariables(bahnlink, startFullAddress, endFullAddress);
+    bahnlink = ReplaceBahnlinkVariables(bahnlink, startCountry, startFullAddress, endFullAddress);
     $("#buy-ticket-panel").show();
     $("#buy-ticket").attr("href", bahnlink);
 }
@@ -141,6 +147,16 @@ function addBuyNowLinksToDirections(response) {
         }
     }
 }
+
+function rebindAutoComplete(element, startOrEnd) {
+    if (startOrEnd == "start") {
+        autoCompleteStart.setComponentRestrictions({country: element.value});
+    }
+    else {
+        autoCompleteEnd.setComponentRestrictions({country: element.value});
+    }
+}
+
 google.maps.event.addDomListener(window, 'load', initialize);
 
 $(document).ready(function() {

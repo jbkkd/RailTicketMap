@@ -29,8 +29,16 @@
         </select>
     <input id="time" type="text" style="width:120px;" onkeydown="if (event.keyCode == 13) calcRoute();">
     <strong>Start:</strong>
+    <select id="startCountry" onchange="rebindAutoComplete(this, 'start')">
+        <option value="de">Germany</option>
+        <option value="ch">Switzerland</option>
+    </select>
     <input id="start" onkeydown="if (event.keyCode == 13) return;">
     <strong>End:</strong>
+    <select id="endCountry" onchange="rebindAutoComplete(this, 'end')">
+        <option value="de">Germany</option>
+        <option value="ch">Switzerland</option>
+    </select>
     <input id="end" onkeydown="if (event.keyCode == 13) return;">
 </div>
 
@@ -38,7 +46,8 @@
     <div id="instructions">
         Enter Start and End destinations to get a rail connection and buy tickets.
         <div id="help">
-            Version 0.5<br>
+            Version 0.6<br>
+            Beta - Germany and Switzerland Only<br>
             Questions? Comments? Answers? Anything else? find me on omerkorner at gmail,
             or go to <a href="https://github.com/jbkkd/RailTicketMap" target="_blank">https://github.com/jbkkd/RailTicketMap</a>
         </div>
