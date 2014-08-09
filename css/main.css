@@ -106,7 +106,6 @@ html, body, #map-canvas {
 }
 
 #directions-panel {
-    margin-top: 10px;
     height: 100%;
     float: right;
     width: 390px;
@@ -115,13 +114,20 @@ html, body, #map-canvas {
 
 #instructions {
     text-align: center;
-    font-size: 1.8em;
-    margin-top: 50%;
+    font-size: 1.2em;
+    height:100%;
+}
+
+#whitepadding {
+    height: 20%;
+}
+
+#top {
+    height: 40%;
 }
 
 #help {
-    font-size: 0.3em;
-    margin-top: 70%;
+    font-size: 0.6em;
 }
 
 #buy-ticket-panel {

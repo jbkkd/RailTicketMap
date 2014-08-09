@@ -100,6 +100,7 @@ function ReplaceCountrySite(startCountry, endCountry, bahnlink) {
     }
     return bahnlink;
 }
+
 function ReplaceBahnlinkVariables(bahnlink, startCountry, endCountry, startFullAddress, endFullAddress) {
     var date = $("#time").datetimepicker("getDate");
     date = date ? date : new Date;
@@ -175,11 +176,22 @@ function addBuyNowLinksToDirections(response) {
 }
 
 function rebindAutoComplete(element, startOrEnd) {
-    if (startOrEnd == "start") {
+    if (startOrEnd == 'start') {
         autoCompleteStart.setComponentRestrictions({country: element.value});
     }
     else {
         autoCompleteEnd.setComponentRestrictions({country: element.value});
+    }
+}
+
+function switchEndCountryOptions(element) {
+    if (element.value == 'dk') {
+	$('#endCountry option[value="nl"]').remove();
+    } else {
+	if ($('#endCountry option[value="nl"]').length == 0) {
+	    var nl = '<option value="nl">Netherlands</option>';
+	    $('#endCountry').append(nl);
+	}
     }
 }
 
@@ -189,5 +201,12 @@ $(document).ready(function() {
     $('#time').datetimepicker({
         minDate: new Date(),
         onSelect: function () {calcRoute();}
+    });
+    $('#startCountry').on('change', function() {
+	rebindAutoComplete(this, 'start');
+	switchEndCountryOptions(this);
+    });
+    $('#endCountry').on('change', function() {
+	rebindAutoComplete(this, 'end');
     });
 })

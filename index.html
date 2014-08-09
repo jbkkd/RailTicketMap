@@ -29,29 +29,35 @@
         </select>
     <input id="time" type="text" style="width:120px;" onkeydown="if (event.keyCode == 13) calcRoute();">
     <strong>Start:</strong>
-    <select id="startCountry" onchange="rebindAutoComplete(this, 'start')">
+    <select id="startCountry">
         <option value="de">Germany</option>
         <option value="ch">Switzerland</option>
         <option value="dk">Denmark</option>
     </select>
     <input id="start" onkeydown="if (event.keyCode == 13) return;">
     <strong>End:</strong>
-    <select id="endCountry" onchange="rebindAutoComplete(this, 'end')">
+    <select id="endCountry">
         <option value="de">Germany</option>
         <option value="ch">Switzerland</option>
         <option value="dk">Denmark</option>
+	<option value="nl">Netherlands</option>
     </select>
     <input id="end" onkeydown="if (event.keyCode == 13) return;">
 </div>
 
 <div id="directions-panel">
     <div id="instructions">
-        Enter Start and End destinations to get a rail connection and buy tickets.
+        <div id="whitepadding"></div>
+        <div id="top">
+            <h1>RailTicketMap</h1>
+            <h2>Enter Start and End destinations to get a rail connection and buy tickets.</h2>
+        </div>
         <div id="help">
-            Version 0.7<br>
-            Beta - Germany, Switzerland and Denmark<br>
-            Questions? Comments? Answers? Anything else? find me on omerkorner at gmail,
-            or go to <a href="https://github.com/jbkkd/RailTicketMap" target="_blank">https://github.com/jbkkd/RailTicketMap</a>
+            <div>Version 0.8</div>
+            <div>Beta - Germany, Switzerland, Denmark and (partially) Netherlands</div>
+            <div>Questions? Comments? Answers? Anything else? find me on</div>
+            <div>omerkorner at gmail, or go to <a href="https://github.com/jbkkd/RailTicketMap" target="_blank">https://github.com/jbkkd/RailTicketMap</a></div>
+            <div>You can also <a href="/blog">read my blog</a></div>
         </div>
     </div>
     <div id="buy-ticket-panel">
@@ -70,3 +76,4 @@
 </script>
 </body>
 </html>
+
